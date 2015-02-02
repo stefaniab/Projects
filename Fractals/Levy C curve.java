@@ -2,20 +2,25 @@ package fractals;
 import java.util.*;
 import edu.princeton.cs.introcs.StdDraw;
 
-public class DragonCurve
+/*
+Draws a Levy C curve (http://en.wikipedia.org/wiki/L%C3%A9vy_C_curve)
+02.02.2015
+Stefanía Bergljót Stefánsdóttir
+*/
+
+
+public class LevyC
 {
 	private int level;
-	private double x, y;					// used for scaling picture
+	private double x;					// used for scaling picture
 	private Vector<Integer> sequence;
 	
-	public DragonCurve(int lvl)		// generates a curve of level lvl
+	public LevyC(int lvl)		// generates a fractal of level lvl
 	{
 		level = 1;
-		x = 2;
-		y = 1;
+		x = 1;
 		sequence = new Vector<Integer>();
-		sequence.add(3);
-		sequence.add(1);
+		sequence.add(2);
 		for (int i = 0; i < lvl; i++) level_up();
 	}
 
@@ -26,36 +31,26 @@ public class DragonCurve
 		if(level % 2 != 0)
 		{
 			x = (2 * x + 1);
-			y = (2 * y + 1);
 		}
 	}
 	
 	private Vector<Integer> nextCurve(Vector<Integer> old)	// generates the next sequence
 	{
-		boolean clockwise = true;
 		Vector<Integer> newCurve = new Vector<Integer>();
 		for (int i : old)
 		{
-			if(clockwise) 
-			{
-				newCurve.add((i + 1) % 8); 
-				newCurve.add((i + 7) % 8);
-			}
-			else 
-			{
-				newCurve.add((i + 7) % 8); 
-				newCurve.add((i + 1) % 8);
-			}
-			clockwise = !clockwise;
+			newCurve.add((i + 1) % 8); 
+			newCurve.add((i + 7) % 8);
 		}
 		return newCurve;
 	}
 	
 	public void draw()
 	{
-		double d = 1.0 / (x * 1.2);
-		double x_coord = 0.2, y_coord = 0.6;
-		StdDraw.setCanvasSize(1200, 1200);
+		double d = 0.75 / (x);
+		if (level % 2 == 0) d /= 2;
+		double x_coord = 0.25, y_coord = 0.6;
+		StdDraw.setCanvasSize(650, 650);
 		
 		for (int i : sequence)
 		{
@@ -101,8 +96,8 @@ public class DragonCurve
 	
 	public static void main(String[] args)
 	{
-		int level = 10;
-		DragonCurve d = new DragonCurve(level);
-		d.draw();
+
+		LevyC c = new LevyC(13);
+		c.draw();
 	}
 }
